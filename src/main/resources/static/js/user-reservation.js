@@ -121,7 +121,7 @@ function renderAvailableTimes(times) {
           response 명세에 맞춰 createSlot 함수 호출 시 값 설정
     */
     const startAt = time.startAt;
-    const timeId = time.timeId;
+    const timeId = time.id;
     const alreadyBooked = false;
 
     const div = createSlot('time', startAt, timeId, alreadyBooked); // createSlot('time', 시작 시간, time id, 예약 여부)
@@ -165,7 +165,7 @@ function onReservationButtonClick() {
 
   if (selectedDate && selectedThemeId && selectedTimeId) {
     const timeData = {
-      timeId: selectedTimeId,
+      id: selectedTimeId,
       startAt: null
     }
     const themeData = {
