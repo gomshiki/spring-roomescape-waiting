@@ -8,7 +8,11 @@ public class MemberResponseDto {
     private String role;
 
     public MemberResponseDto(String name) {
-        this.name = name;
+        this(null, name);
+    }
+
+    public MemberResponseDto(Long id, String name) {
+        this(id, name, null, null);
     }
 
     public MemberResponseDto(Long id, String name, String email, String role) {
