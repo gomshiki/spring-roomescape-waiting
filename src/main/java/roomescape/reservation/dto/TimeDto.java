@@ -1,8 +1,12 @@
 package roomescape.reservation.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TimeDto {
 
+    @JsonProperty("id")
     private Long timeId;
+    @JsonProperty("start_at")
     private String startAt;
 
     public TimeDto(Long timeId, String startAt) {

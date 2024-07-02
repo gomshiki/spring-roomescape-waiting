@@ -25,8 +25,6 @@ public class MemberConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
-        System.out.println("addInterceptors");
         registry.addInterceptor(memberHandlerInterceptor)
                 .addPathPatterns("/admin/**");
     }
