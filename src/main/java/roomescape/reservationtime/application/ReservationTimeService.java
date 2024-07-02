@@ -3,6 +3,7 @@ package roomescape.reservationtime.application;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roomescape.reservationtime.domain.ReservationTime;
+import roomescape.reservationtime.infra.ReservationTimeJpaRepository;
 import roomescape.reservationtime.infra.ReservationTimeRepository;
 import roomescape.reservationtime.dto.ReservationTimeRequestDto;
 import roomescape.reservationtime.dto.ReservationTimeResponseDto;
@@ -14,7 +15,7 @@ public class ReservationTimeService {
 
     private final ReservationTimeRepository reservationTimeRepository;
 
-    public ReservationTimeService(ReservationTimeRepository reservationTimeRepository) {
+    public ReservationTimeService(ReservationTimeJpaRepository reservationTimeRepository) {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
@@ -28,9 +29,8 @@ public class ReservationTimeService {
     @Transactional
     public ReservationTimeResponseDto addTime(final ReservationTimeRequestDto reservationTimeRequestDto) {
         final ReservationTime reservationTime = new ReservationTime(reservationTimeRequestDto.getStartAt());
-        final Long savedTimeId = reservationTimeRepository.save(reservationTime);
-        final ReservationTime savedTime = reservationTimeRepository.findById(savedTimeId);
-        return new ReservationTimeResponseDto(savedTimeId, savedTime.getStartAt());
+        final ReservationTime savedTime = reservationTimeRepository.save(reservationTime);
+        return new ReservationTimeResponseDto(savedTime.getId(), savedTime.getStartAt());
     }
 
     @Transactional

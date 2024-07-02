@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ReservationTimeResponseDto {
 
-    @JsonProperty("timeId")
+    @JsonProperty("id")
     private Long timeId;
     @JsonProperty("startAt")
     private String startAt;

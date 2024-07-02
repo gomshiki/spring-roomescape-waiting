@@ -1,13 +1,25 @@
 package roomescape.reservationtime.domain;
 
+import jakarta.persistence.*;
+import roomescape.reservation.domain.Reservation;
+
+import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class ReservationTime {
 
     private final static ReservationTimePolicy RESERVATION_TIME_POLICY = new ReservationTimePolicy();
 
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String startAt;
+
+    @OneToMany(mappedBy = "reservationTime")
+    private List<Reservation> reservation;
+
+    public ReservationTime() {
+    }
 
     public ReservationTime(Long id) {
         this.id = id;
