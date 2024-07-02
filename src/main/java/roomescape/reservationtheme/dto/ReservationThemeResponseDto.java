@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ReservationThemeResponseDto {
 
-    @JsonProperty("themeId")
+    @JsonProperty("id")
     private Long themeId;
     @JsonProperty("name")
     private String name;

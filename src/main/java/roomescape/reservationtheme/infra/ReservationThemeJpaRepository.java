@@ -1,12 +1,12 @@
 package roomescape.reservationtheme.infra;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.CrudRepository;
 import roomescape.reservationtheme.domain.ReservationTheme;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ReservationThemeRepository {
+public interface ReservationThemeJpaRepository extends CrudRepository<ReservationTheme, Long>, ReservationThemeRepository {
 
     List<ReservationTheme> findAll();
 
@@ -17,4 +17,5 @@ public interface ReservationThemeRepository {
     void deleteById(Long id);
 
     boolean existsById(Long id);
+
 }

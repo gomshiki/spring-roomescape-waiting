@@ -1,9 +1,14 @@
 package roomescape.reservationtheme.domain;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+
+@Entity(name = "theme")
 public class ReservationTheme {
 
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
@@ -24,6 +29,9 @@ public class ReservationTheme {
         this.name = name;
         this.description = description;
         this.thumbnail = thumbnail;
+    }
+
+    public ReservationTheme() {
     }
 
     public static class Builder {
