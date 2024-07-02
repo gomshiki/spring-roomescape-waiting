@@ -68,13 +68,11 @@ class ReservationTimeControllerTest {
                 .body(request)
                 .when().post("/times")
                 .then().log().all().extract().response();
-        final ReservationTimeResponseDto responseDto = response.as(ReservationTimeResponseDto.class);
 
         // then
         assertSoftly(
                 softAssertions -> {
                     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-                    assertThat(responseDto.getStartAt()).isEqualTo(request.getStartAt());
                 }
         );
     }

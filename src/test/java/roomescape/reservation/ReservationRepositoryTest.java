@@ -11,9 +11,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import roomescape.globalfixture.entity.ReservationFixture;
 import roomescape.reservation.domain.Reservation;
-import roomescape.reservation.infra.ReservationRepository;
-import roomescape.reservationtheme.infra.ReservationThemeRepository;
-import roomescape.reservationtime.infra.ReservationTimeRepository;
+import roomescape.reservation.infra.ReservationJdbcRepository;
+import roomescape.reservationtheme.infra.ReservationThemeJdbcRepository;
+import roomescape.reservationtime.infra.ReservationTimeJdbcRepository;
 
 import java.util.List;
 
@@ -25,28 +25,28 @@ import static org.assertj.core.api.Assertions.*;
 @Sql(scripts = "/test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class ReservationRepositoryTest {
 
-    private ReservationRepository reservationRepository;
-    private ReservationThemeRepository reservationThemeRepository;
-    private ReservationTimeRepository reservationTimeRepository;
+    private ReservationJdbcRepository reservationRepository;
+    private ReservationThemeJdbcRepository reservationThemeJdbcRepository;
+    private ReservationTimeJdbcRepository reservationTimeRepository;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
-        reservationRepository = new ReservationRepository(jdbcTemplate);
-        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate);
-        reservationThemeRepository = new ReservationThemeRepository(jdbcTemplate);
+        reservationRepository = new ReservationJdbcRepository(jdbcTemplate);
+        reservationTimeRepository = new ReservationTimeJdbcRepository(jdbcTemplate);
+        reservationThemeJdbcRepository = new ReservationThemeJdbcRepository(jdbcTemplate);
     }
 
     @DisplayName("전체 예약을 조회합니다.")
     @Test
     void findAll() {
         // when
-        final List<Reservation> actual = reservationRepository.findAll();
+        final List<Reservation> actual = reservationRepository.findAllWithDetails();
 
         // then
-        assertThat(actual).hasSize(1);
+        assertThat(actual).hasSize(2);
     }
 
     @DisplayName("예약을 저장합니다.")
@@ -56,10 +56,9 @@ class ReservationRepositoryTest {
         final Reservation request = ReservationFixture.createReservation();
 
         // when
-        final Long savedReservationId = reservationRepository.save(request);
+        final Reservation actual = reservationRepository.save(request);
 
         // then
-        final Reservation actual = reservationRepository.findById(savedReservationId);
         assertThat(actual.getDate()).isEqualTo(request.getDate());
         assertThat(actual.getName()).isEqualTo(request.getName());
     }
@@ -69,13 +68,13 @@ class ReservationRepositoryTest {
     void deleteById() {
         // given
         final Reservation request = ReservationFixture.createReservation();
-        final Long savedReservationId = reservationRepository.save(request);
+        final Reservation savedReservation = reservationRepository.save(request);
 
         // when
-        reservationRepository.deleteById(savedReservationId);
+        reservationRepository.deleteById(savedReservation.getId());
 
         // then
-        assertThatThrownBy(() -> reservationRepository.findById(savedReservationId))
+        assertThatThrownBy(() -> reservationRepository.findByIdWithDetails(savedReservation.getId()))
                 .isInstanceOf(DataAccessException.class);
     }
 }

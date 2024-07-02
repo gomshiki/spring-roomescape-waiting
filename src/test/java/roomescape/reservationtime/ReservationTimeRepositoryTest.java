@@ -11,6 +11,7 @@ import org.springframework.test.context.jdbc.Sql;
 import roomescape.globalfixture.entity.ReservationTimeFixture;
 import roomescape.reservationtime.domain.ReservationTime;
 import roomescape.reservationtime.infra.ReservationTimeRepository;
+import roomescape.reservationtime.infra.ReservationTimeJdbcRepository;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ class ReservationTimeRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate);
+        reservationTimeRepository = new ReservationTimeJdbcRepository(jdbcTemplate);
     }
 
     @DisplayName("예약 시간을 등록할 수 있습니다.")
@@ -38,10 +39,10 @@ class ReservationTimeRepositoryTest {
         // given
         final ReservationTime request = ReservationTimeFixture.createReservationTime();
         // when
-        final Long id = reservationTimeRepository.save(request);
+        final ReservationTime savedTime = reservationTimeRepository.save(request);
 
         // then
-        final ReservationTime actual = reservationTimeRepository.findById(id);
+        final ReservationTime actual = reservationTimeRepository.findById(savedTime.getId()).get();
         assertThat(actual.getStartAt()).isEqualTo(request.getStartAt());
     }
 
@@ -50,13 +51,13 @@ class ReservationTimeRepositoryTest {
     void deleteTime() {
         // given
         final ReservationTime request = ReservationTimeFixture.createReservationTime();
-        final Long id = reservationTimeRepository.save(request);
+        final ReservationTime savedTime = reservationTimeRepository.save(request);
 
         // when
-        reservationTimeRepository.deleteById(id);
+        reservationTimeRepository.deleteById(savedTime.getId());
 
         // then
-        assertThat(reservationTimeRepository.existsById(id)).isFalse();
+        assertThat(reservationTimeRepository.existsById(savedTime.getId())).isFalse();
     }
 
     @DisplayName("예약 시간을 조회할 수 있습니다.")
@@ -74,13 +75,13 @@ class ReservationTimeRepositoryTest {
     void findById() {
         // given
         final ReservationTime request = ReservationTimeFixture.createReservationTime();
-        final Long id = reservationTimeRepository.save(request);
+        final ReservationTime savedTime = reservationTimeRepository.save(request);
 
         // when
-        final ReservationTime actual = reservationTimeRepository.findById(id);
+        final ReservationTime actual = reservationTimeRepository.findById(savedTime.getId()).get();
 
         // then
-        assertThat(actual.getId()).isEqualTo(id);
+        assertThat(actual.getId()).isEqualTo(savedTime.getId());
         assertThat(actual.getStartAt()).isEqualTo(request.getStartAt());
     }
 }

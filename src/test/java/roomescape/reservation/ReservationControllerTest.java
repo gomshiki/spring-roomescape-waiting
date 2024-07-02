@@ -78,7 +78,7 @@ class ReservationControllerTest {
         assertSoftly(
                 softAssertions -> {
                     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-                    assertThat(response.jsonPath().getList("id").size()).isEqualTo(1);
+                    assertThat(response.jsonPath().getList("id").size()).isEqualTo(2);
                 }
         );
     }

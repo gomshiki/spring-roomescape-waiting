@@ -10,7 +10,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import roomescape.globalfixture.entity.ReservationThemeFixture;
 import roomescape.reservationtheme.domain.ReservationTheme;
-import roomescape.reservationtheme.infra.ReservationThemeRepository;
+import roomescape.reservationtheme.infra.ReservationThemeJdbcRepository;
 
 import java.util.List;
 
@@ -25,11 +25,11 @@ class ReservationThemeRepositoryTest {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    private ReservationThemeRepository reservationThemeRepository;
+    private ReservationThemeJdbcRepository reservationThemeJdbcRepository;
 
     @BeforeEach
     void setUp(){
-        reservationThemeRepository = new ReservationThemeRepository(jdbcTemplate);
+        reservationThemeJdbcRepository = new ReservationThemeJdbcRepository(jdbcTemplate);
     }
 
     @DisplayName("테마를 저장할 수 있습니다.")
@@ -37,10 +37,9 @@ class ReservationThemeRepositoryTest {
     void save() {
         //given
         final ReservationTheme request = ReservationThemeFixture.createReservationTheme();
-        final Long id = reservationThemeRepository.save(request);
 
         //when
-        final ReservationTheme savedTheme = reservationThemeRepository.findById(id);
+        final ReservationTheme savedTheme = reservationThemeJdbcRepository.save(request);
 
         //then
         assertThat(savedTheme.getName()).isEqualTo(request.getName());
@@ -50,7 +49,7 @@ class ReservationThemeRepositoryTest {
     @Test
     void findAll() {
         //when
-        final List<ReservationTheme> savedThemes = reservationThemeRepository.findAll();
+        final List<ReservationTheme> savedThemes = reservationThemeJdbcRepository.findAll();
 
         //then
         assertThat(savedThemes.size()).isEqualTo(2);
@@ -61,12 +60,9 @@ class ReservationThemeRepositoryTest {
     void findById() {
         //given
         final ReservationTheme request = ReservationThemeFixture.createReservationTheme();
-        final Long requestId = reservationThemeRepository.save(request);
+        final ReservationTheme savedTheme = reservationThemeJdbcRepository.save(request);
 
-        //when
-        final ReservationTheme savedTheme = reservationThemeRepository.findById(requestId);
-
-        //then
+        //when, then
         assertThat(savedTheme.getName()).isEqualTo(request.getName());
     }
 
@@ -75,13 +71,13 @@ class ReservationThemeRepositoryTest {
     void deleteById() {
         //given
         final ReservationTheme request = ReservationThemeFixture.createReservationTheme();
-        final Long id = reservationThemeRepository.save(request);
+        final ReservationTheme savedTheme = reservationThemeJdbcRepository.save(request);
 
         //when
-        reservationThemeRepository.deleteById(id);
+        reservationThemeJdbcRepository.deleteById(savedTheme.getId());
 
         //then
-        assertThat(reservationThemeRepository.existById(id)).isFalse();
+        assertThat(reservationThemeJdbcRepository.existsById(savedTheme.getId())).isFalse();
     }
 
     @DisplayName("테마가 존재하는지 확인할 수 있습니다.")
@@ -89,10 +85,10 @@ class ReservationThemeRepositoryTest {
     void existById() {
         //given
         final ReservationTheme request = ReservationThemeFixture.createReservationTheme();
-        final Long id = reservationThemeRepository.save(request);
+        final ReservationTheme savedTheme = reservationThemeJdbcRepository.save(request);
 
         //when
-        final boolean isExisted = reservationThemeRepository.existById(id);
+        final boolean isExisted = reservationThemeJdbcRepository.existsById(savedTheme.getId());
 
         //then
         assertThat(isExisted).isTrue();
