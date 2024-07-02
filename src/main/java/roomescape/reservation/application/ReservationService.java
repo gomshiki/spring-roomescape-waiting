@@ -1,36 +1,42 @@
 package roomescape.reservation.application;
 
+import jakarta.persistence.EntityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import roomescape.reservation.infra.ReservationRepository;
 import roomescape.reservation.dto.ReservationRequestDto;
 import roomescape.reservation.dto.ReservationResponseDto;
 import roomescape.reservation.domain.Reservation;
+import roomescape.reservation.infra.ReservationJpaRepository;
+import roomescape.reservation.infra.ReservationRepository;
 import roomescape.reservationtheme.domain.ReservationTheme;
 import roomescape.reservationtime.domain.ReservationTime;
 import roomescape.reservationtime.dto.ReservationTimeResponseDto;
 
 import java.util.List;
 
-import static roomescape.reservation.dto.ReservationResponseDto.reservationResponseDtoFromReservation;
+import static roomescape.reservation.dto.ReservationResponseDto.reservationToDto;
 
 @Service
 public class ReservationService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ReservationService.class);
     private final ReservationRepository reservationRepository;
+    private final EntityManager entityManager;
 
-    public ReservationService(ReservationRepository reservationRepository) {
+    public ReservationService(ReservationJpaRepository reservationRepository, EntityManager entityManager) {
         this.reservationRepository = reservationRepository;
+        this.entityManager = entityManager;
     }
 
     public List<ReservationResponseDto> findAll() {
-        final List<Reservation> reservations = reservationRepository.findAll();
+        final List<Reservation> reservations = reservationRepository.findAllWithDetails();
         return reservations.stream()
-                .map(reservation -> reservationResponseDtoFromReservation(reservation)
+                .map(reservation -> reservationToDto(reservation)
                 ).toList();
     }
 
-    @Transactional
     public ReservationResponseDto save(final ReservationRequestDto reservationRequestDto) {
         final Reservation reservation = new Reservation.Builder()
                 .name(reservationRequestDto.getName())
@@ -40,10 +46,14 @@ public class ReservationService {
                 .reservationTheme(new ReservationTheme(
                     reservationRequestDto.getReservationThemeRequestDto().getThemeId()))
                 .build();
-        final Long savedId = reservationRepository.save(reservation);
-        final Reservation savedReservation = reservationRepository.findById(savedId);
 
-        return reservationResponseDtoFromReservation(savedReservation);
+        final Reservation savedReservation = reservationRepository.save(reservation);
+
+        entityManager.clear();
+
+        final Reservation foundAllReservation = reservationRepository.findByIdWithDetails(savedReservation.getId()).get();
+
+        return reservationToDto(foundAllReservation);
     }
 
 
@@ -56,6 +66,7 @@ public class ReservationService {
         reservationRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<ReservationTimeResponseDto> findAvailableTimes(final String date, final Long themeId) {
         final List<ReservationTime> availableReservationTimes = reservationRepository.getAvailableReservationTimes(date, themeId);
         return availableReservationTimes.stream()

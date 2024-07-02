@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("/reservations")
 public class ReservationController {
 
-    private static final Logger log = LoggerFactory.getLogger(ReservationController.class);
     private final ReservationService reservationService;
 
     public ReservationController(ReservationService reservationService) {

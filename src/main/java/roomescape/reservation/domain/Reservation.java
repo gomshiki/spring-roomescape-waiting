@@ -1,18 +1,31 @@
 package roomescape.reservation.domain;
 
+import jakarta.persistence.*;
 import roomescape.reservationtheme.domain.ReservationTheme;
 import roomescape.reservationtime.domain.ReservationTime;
 
 import java.util.Objects;
 
+@Entity
 public class Reservation {
     private final static ReservationPolicy RESERVATION_POLICY = new ReservationPolicy();
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "time_id")
     private ReservationTime reservationTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "theme_id")
     private ReservationTheme reservationTheme;
+
+    public Reservation(String name, String date, ReservationTime reservationTime, ReservationTheme reservationTheme) {
+        this(null, name, date, reservationTime, reservationTheme);
+    }
 
     public Reservation(Long id, String name, String date, ReservationTime reservationTime, ReservationTheme reservationTheme) {
         this.id = id;
@@ -29,6 +42,8 @@ public class Reservation {
         this.reservationTheme = reservationTheme;
 
     }
+
+    public Reservation() { }
 
     public static class Builder {
         private Long id;

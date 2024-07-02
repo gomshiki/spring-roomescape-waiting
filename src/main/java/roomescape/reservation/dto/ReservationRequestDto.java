@@ -6,6 +6,9 @@ import roomescape.reservationtheme.dto.ReservationThemeRequestDto;
 import roomescape.reservationtime.dto.ReservationTimeRequestDto;
 
 public class ReservationRequestDto {
+    @JsonProperty
+    private Long id;
+
     @JsonProperty("name")
     private String name;
 
@@ -15,6 +18,7 @@ public class ReservationRequestDto {
 
     @JsonProperty("time")
     private TimeDto timeDto;
+
     @JsonProperty("theme")
     private ReservationThemeRequestDto reservationThemeRequestDto;
 
