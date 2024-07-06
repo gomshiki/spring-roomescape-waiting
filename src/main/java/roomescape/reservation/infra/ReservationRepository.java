@@ -18,5 +18,5 @@ public interface ReservationRepository {
 
     List<ReservationTime> getAvailableReservationTimes(String date, Long themeId);
 
-    Optional<Reservation> findByIdWithDetails(Long id);
+    List<Reservation> findByNameWithDetails(String name);
 }
