@@ -1,5 +1,7 @@
 package roomescape.member.dto;
 
+import roomescape.member.domain.Member;
+
 public class MemberResponseDto {
 
     private Long id;
@@ -20,6 +22,10 @@ public class MemberResponseDto {
         this.name = name;
         this.email = email;
         this.role = role;
+    }
+
+    public static MemberResponseDto from(Member member) {
+        return new MemberResponseDto(member.getId(), member.getName());
     }
 
     public Long getId() { return id; }
