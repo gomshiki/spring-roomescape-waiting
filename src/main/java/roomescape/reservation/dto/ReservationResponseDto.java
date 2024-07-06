@@ -66,7 +66,7 @@ public class ReservationResponseDto {
         }
     }
 
-    public static ReservationResponseDto reservationToDto(Reservation reservation) {
+    public static ReservationResponseDto from(Reservation reservation) {
         return new Builder()
                 .id(reservation.getId())
                 .memberResponseDto(new MemberResponseDto(
