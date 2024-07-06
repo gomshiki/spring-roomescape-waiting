@@ -1,4 +1,4 @@
-package roomescape;
+package roomescape.resevation;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -63,9 +63,7 @@ class ReservationControllerTest {
         assertAll(
                 () -> assertEquals(HttpStatus.OK.value(), response.statusCode()),
                 () -> assertEquals("제이슨", response.jsonPath().getString("member.name")),
-                () -> assertEquals(request.getDate(), response.jsonPath().getString("date")),
-                () -> assertEquals(request.getTimeDto().getStartAt(),
-                        response.jsonPath().getString("time.startAt"))
+                () -> assertEquals(request.getDate(), response.jsonPath().getString("date"))
         );
     }
 
@@ -81,7 +79,7 @@ class ReservationControllerTest {
         assertSoftly(
                 softAssertions -> {
                     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-                    assertThat(response.jsonPath().getList("id").size()).isEqualTo(2);
+                    assertThat(response.jsonPath().getList("id")).hasSize(2);
                 }
         );
     }
