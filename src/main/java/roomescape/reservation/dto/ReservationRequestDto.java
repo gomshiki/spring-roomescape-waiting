@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import roomescape.reservationtheme.dto.ReservationThemeRequestDto;
 
 public class ReservationRequestDto {
-    @JsonProperty
+    @JsonProperty("id")
     private Long id;
 
     @JsonProperty("name")
@@ -21,8 +21,12 @@ public class ReservationRequestDto {
     @JsonProperty("theme")
     private ReservationThemeRequestDto reservationThemeRequestDto;
 
-    public ReservationRequestDto(String name, String date, TimeDto timeDto,
-                                 ReservationThemeRequestDto reservationThemeRequestDto) {
+    public ReservationRequestDto(
+            String name,
+            String date,
+            TimeDto timeDto,
+            ReservationThemeRequestDto reservationThemeRequestDto
+    ) {
         this.name = name;
         this.date = date;
         this.timeDto = timeDto;
