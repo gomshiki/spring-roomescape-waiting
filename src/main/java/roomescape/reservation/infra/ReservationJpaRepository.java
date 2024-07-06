@@ -38,6 +38,13 @@ public interface ReservationJpaRepository extends CrudRepository<Reservation, Lo
             JOIN FETCH r.reservationTheme
             WHERE r.id = :id
             """)
-    Optional<Reservation> findByIdWithDetails(@Param("id") Long id);
+    List<Reservation> findByIdWithDetails(@Param("id") Long id);
 
+    @Query("""
+            SELECT r FROM Reservation r
+            JOIN FETCH r.reservationTime
+            JOIN FETCH r.reservationTheme
+            WHERE r.name = :name
+            """)
+    List<Reservation> findByNameWithDetails(@Param("name") String name);
 }
