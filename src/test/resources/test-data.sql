@@ -16,5 +16,7 @@ VALUES ('김준성', '2024-12-25', 1, 1);
 INSERT INTO reservation(name, date, time_id, theme_id)
 VALUES ('김준성', '2024-12-25', 1, 2);
 
-INSERT INTO member(name, email, password)
-VALUES ('제이슨', 'json@email.com', '1234');
+INSERT INTO member (name, email, password, role)
+VALUES ('제이슨', 'json@email.com', '1234', 'ADMIN');
+INSERT INTO member (name, email, password, role)
+VALUES ('조던', 'jordon@email.com', '1234', 'MEMBER');
