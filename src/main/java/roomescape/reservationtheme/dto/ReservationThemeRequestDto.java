@@ -25,6 +25,10 @@ public class ReservationThemeRequestDto {
     public ReservationThemeRequestDto() {
     }
 
+    public ReservationThemeRequestDto(Long themeId) {
+        this.themeId = themeId;
+    }
+
     public ReservationThemeRequestDto(String name, String description, String thumbnail) {
         this(null, name, description, thumbnail);
     }
