@@ -1,4 +1,4 @@
-package roomescape;
+package roomescape.resevation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -75,7 +75,6 @@ class ReservationRepositoryTest {
         reservationRepository.deleteById(savedReservation.getId());
 
         // then
-        assertThatThrownBy(() -> reservationRepository.findByIdWithDetails(savedReservation.getId()))
-                .isInstanceOf(DataAccessException.class);
+        assertThat(reservationRepository.existsById(savedReservation.getId())).isFalse();
     }
 }
