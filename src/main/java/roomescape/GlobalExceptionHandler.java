@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import roomescape.member.infra.AuthorizationException;
+import roomescape.member.infra.MemberNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,5 +46,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<String> handleAuthorizationException(AuthorizationException ex) {
         return new ResponseEntity<>("Authorization Exception: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ResponseEntity<String> handleMemberNotFoundException(MemberNotFoundException ex) {
+        return new ResponseEntity<>("MemberNotFoundException: " + ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
