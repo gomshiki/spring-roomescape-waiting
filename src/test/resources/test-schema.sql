@@ -24,6 +24,7 @@ CREATE TABLE reservation
     id       BIGINT       NOT NULL AUTO_INCREMENT,
     name     VARCHAR(255) NOT NULL,
     date     VARCHAR(255) NOT NULL,
+    status VARCHAR(255) DEFAULT '예약',
     time_id  BIGINT,
     theme_id BIGINT,
     PRIMARY KEY (id),
@@ -36,6 +37,7 @@ CREATE TABLE member
     id BIGINT   NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(255)
 );
 
