@@ -12,7 +12,6 @@ import roomescape.member.application.AuthService;
 import roomescape.member.dto.LoginMemberRequestDto;
 import roomescape.member.dto.MemberResponseDto;
 import roomescape.member.dto.TokenResponseDto;
-import roomescape.member.infra.MemberNotFoundException;
 
 import static roomescape.member.infra.TokenUtil.extractTokenFromCookie;
 

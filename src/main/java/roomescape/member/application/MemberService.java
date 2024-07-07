@@ -7,7 +7,6 @@ import roomescape.member.infra.MemberNotFoundException;
 import roomescape.member.infra.MemberRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberService {

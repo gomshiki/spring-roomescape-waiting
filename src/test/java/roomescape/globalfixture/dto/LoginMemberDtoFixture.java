@@ -1,6 +1,5 @@
 package roomescape.globalfixture.dto;
 
-
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import roomescape.member.dto.LoginMemberRequestDto;

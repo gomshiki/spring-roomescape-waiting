@@ -1,7 +1,5 @@
 package roomescape.member.application;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import roomescape.member.domain.Member;
 import roomescape.member.dto.LoginMemberRequestDto;
@@ -9,7 +7,6 @@ import roomescape.member.dto.MemberResponseDto;
 import roomescape.member.dto.TokenResponseDto;
 import roomescape.member.infra.*;
 
-import java.util.Optional;
 
 @Service
 public class AuthService {

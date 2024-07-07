@@ -4,7 +4,6 @@ import roomescape.reservation.domain.Reservation;
 import roomescape.reservationtime.domain.ReservationTime;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ReservationRepository {
 
