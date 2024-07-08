@@ -23,9 +23,7 @@ public class MemberService {
     }
 
     public MemberResponseDto findById(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(
-                () -> new MemberNotFoundException("해당 회원 정보가 없습니다.")
-        );
+        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
         return MemberResponseDto.from(member);
     }
 }
