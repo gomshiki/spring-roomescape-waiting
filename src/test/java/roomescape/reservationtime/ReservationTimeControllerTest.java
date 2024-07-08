@@ -51,7 +51,7 @@ class ReservationTimeControllerTest {
         assertSoftly(
                 softAssertions ->{
                     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-                    assertThat(reservations.size()).isEqualTo(3);
+                    assertThat(reservations).hasSize(3);
                 }
         );
     }
@@ -72,7 +72,7 @@ class ReservationTimeControllerTest {
         // then
         assertSoftly(
                 softAssertions -> {
-                    assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+                    assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
                 }
         );
     }
@@ -82,11 +82,11 @@ class ReservationTimeControllerTest {
     void deleteTime() {
         // given
         final Response response = createTime(ReservationTimeDtoFixture.createReservationTimeRequestDto());
-        final ReservationTimeResponseDto responseDto = response.as(ReservationTimeResponseDto.class);
+        int savedTimeId = response.jsonPath().getInt("id");
 
         // when
         final Response response2 = RestAssured.given().log().all()
-                .when().delete("/times/" + responseDto.getTimeId())
+                .when().delete("/times/" + savedTimeId)
                 .then().log().all().extract().response();
 
         // then

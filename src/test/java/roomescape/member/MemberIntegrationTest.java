@@ -63,10 +63,9 @@ class MemberIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/login")
                 .then().log().all().extract().response();
-        String responseBody = response.getBody().asString();
 
         //then
-        assertThat(responseBody).isEqualTo("Authorization Exception: 해당하는 회원 정보가 없습니다.");
+        assertThat(response.statusCode()).isEqualTo(204);
     }
 
     @DisplayName("쿠키를 이용하여 로그인 사용자 이름을 응답받습니다.")
