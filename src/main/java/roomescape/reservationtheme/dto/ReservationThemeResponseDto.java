@@ -13,6 +13,9 @@ public class ReservationThemeResponseDto {
     @JsonProperty("thumbnail")
     private String thumbnail;
 
+    public ReservationThemeResponseDto() {
+    }
+
     public ReservationThemeResponseDto(Long themeId, String name, String description, String thumbnail) {
         this.themeId = themeId;
         this.name = name;

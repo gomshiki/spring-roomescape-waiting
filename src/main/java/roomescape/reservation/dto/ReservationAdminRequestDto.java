@@ -15,6 +15,9 @@ public class ReservationAdminRequestDto {
     @JsonProperty("date")
     private String date;
 
+    public ReservationAdminRequestDto() {
+    }
+
     public ReservationAdminRequestDto(Long memberId, Long themeId, Long timeId, String date) {
         this.memberId = memberId;
         this.themeId = themeId;

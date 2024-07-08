@@ -9,6 +9,9 @@ public class TimeDto {
     @JsonProperty("start_at")
     private String startAt;
 
+    public TimeDto() {
+    }
+
     public TimeDto(Long timeId) {
         this.timeId = timeId;
     }
