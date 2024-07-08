@@ -8,7 +8,6 @@ import roomescape.reservation.dto.ReservationRequestDto;
 import roomescape.reservation.dto.ReservationResponseDto;
 import roomescape.reservation.infra.ReservationJpaRepository;
 import roomescape.reservation.infra.ReservationRepository;
-import roomescape.reservationtheme.domain.ReservationTheme;
 import roomescape.reservationtime.domain.ReservationTime;
 import roomescape.reservationtime.dto.ReservationTimeResponseDto;
 
@@ -28,7 +27,7 @@ public class ReservationService {
         return reservations.stream().map(ReservationResponseDto::from).toList();
     }
 
-    public ReservationResponseDto save(final ReservationRequestDto reservationRequestDto) {
+    public ReservationResponseDto save(ReservationRequestDto reservationRequestDto) {
         final Reservation reservation = ReservationRequestDto.from(reservationRequestDto);
 
         final Reservation savedReservation = reservationRepository.save(reservation);
@@ -45,7 +44,7 @@ public class ReservationService {
         reservationRepository.deleteById(id);
     }
 
-    public List<ReservationTimeResponseDto> findAvailableTimes(final String date, final Long themeId) {
+    public List<ReservationTimeResponseDto> findAvailableTimes(String date, Long themeId) {
         final List<ReservationTime> availableReservationTimes =
                 reservationRepository.getAvailableReservationTimes(date, themeId);
 
@@ -56,7 +55,7 @@ public class ReservationService {
                 )).toList();
     }
 
-    public List<ReservationMineResponseDto> findAllReservationByName(final String name) {
+    public List<ReservationMineResponseDto> findAllReservationByName(String name) {
         List<Reservation> foundReservations = reservationRepository.findByNameWithDetails(name);
         return foundReservations.stream().map(
                 reservation -> new ReservationMineResponseDto(

@@ -16,7 +16,7 @@ public class ReservationTimeJdbcRepository implements ReservationTimeRepository 
     private final SimpleJdbcInsert simpleJdbcInsert;
     private final RowMapper<ReservationTime> rowMapper;
 
-    public ReservationTimeJdbcRepository(final JdbcTemplate jdbcTemplate) {
+    public ReservationTimeJdbcRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.rowMapper = (resultSet, rowNum) -> new ReservationTime(
                 resultSet.getLong("id"),
@@ -32,7 +32,7 @@ public class ReservationTimeJdbcRepository implements ReservationTimeRepository 
         return jdbcTemplate.query(sql, rowMapper);
     }
 
-    public ReservationTime save(final ReservationTime reservationTime) {
+    public ReservationTime save(ReservationTime reservationTime) {
         if (reservationTime.getId() == null) {
             // 새로운 엔티티 삽입
             Map<String, Object> parameters = new HashMap<>();
@@ -47,17 +47,17 @@ public class ReservationTimeJdbcRepository implements ReservationTimeRepository 
         return reservationTime;
     }
 
-    public void deleteById(final Long id) {
+    public void deleteById(Long id) {
         final String sql = "DELETE FROM reservation_time WHERE id = ?";
         jdbcTemplate.update(sql, Long.valueOf(id));
     }
 
-    public boolean existsById(final Long id) {
+    public boolean existsById(Long id) {
         final String sql = "SELECT EXISTS(SELECT 1 FROM reservation_time WHERE id = ?)";
         return jdbcTemplate.queryForObject(sql, Boolean.class, id);
     }
 
-    public Optional<ReservationTime> findById(final Long id) {
+    public Optional<ReservationTime> findById(Long id) {
         final String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
         return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, id));
     }

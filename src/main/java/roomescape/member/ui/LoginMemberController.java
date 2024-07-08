@@ -26,8 +26,10 @@ public class LoginMemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(final @Valid @RequestBody LoginMemberRequestDto loginMemberRequestDto,
-                                      final HttpServletResponse response) {
+    public ResponseEntity<Void> login(
+            @Valid @RequestBody LoginMemberRequestDto loginMemberRequestDto,
+            HttpServletResponse response
+    ) {
         log.info("loginMemberID : {}", loginMemberRequestDto.getEmail());
         final TokenResponseDto tokenResponseDto = authService.createToken(loginMemberRequestDto);
 
@@ -41,7 +43,7 @@ public class LoginMemberController {
     }
 
     @GetMapping("login/check")
-    public ResponseEntity<MemberResponseDto> getMember(final HttpServletRequest request) {
+    public ResponseEntity<MemberResponseDto> getMember(HttpServletRequest request) {
         final Cookie[] cookies = request.getCookies();
         final String token = extractTokenFromCookie(cookies);
         final MemberResponseDto memberResponseDto = authService.findMemberName(token);
@@ -51,13 +53,12 @@ public class LoginMemberController {
 
     @PostMapping("/logout")
     public ResponseEntity<MemberResponseDto> logout(
-            final HttpServletRequest request, final HttpServletResponse response
+            HttpServletRequest request, HttpServletResponse response
     ) {
         Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
-
         request.getSession().invalidate();
 
         return ResponseEntity.ok().build();

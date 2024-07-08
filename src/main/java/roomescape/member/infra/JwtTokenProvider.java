@@ -14,7 +14,7 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
 
-    public String createToken(final String payload) {
+    public String createToken(String payload) {
         final Claims claims = Jwts.claims().setSubject(payload);
         final Date now = new Date();
         final Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -27,18 +27,18 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Claims extractAllClaims(final String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    public String extractMemberIdFromToken(final String token) {
+    public String extractMemberIdFromToken(String token) {
         return extractAllClaims(token).getSubject();
     }
 
-    public boolean validateToken(final String token) {
+    public boolean validateToken(String token) {
         try {
             final Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());

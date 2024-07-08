@@ -19,9 +19,11 @@ public class ReservationResponseDto {
     @JsonProperty("theme")
     private ReservationThemeResponseDto reservationThemeResponseDto;
 
-    public ReservationResponseDto(Long id, MemberResponseDto memberResponseDto, String date,
-                                  ReservationTimeResponseDto reservationTimeResponseDto,
-                                  ReservationThemeResponseDto reservationThemeResponseDto) {
+    public ReservationResponseDto(
+            Long id, MemberResponseDto memberResponseDto, String date,
+            ReservationTimeResponseDto reservationTimeResponseDto,
+            ReservationThemeResponseDto reservationThemeResponseDto
+    ) {
         this.id = id;
         this.memberResponseDto = memberResponseDto;
         this.date = date;
@@ -88,7 +90,9 @@ public class ReservationResponseDto {
         return id;
     }
 
-    public MemberResponseDto getMemberResponseDto() { return memberResponseDto; }
+    public MemberResponseDto getMemberResponseDto() {
+        return memberResponseDto;
+    }
 
     public String getDate() {
         return date;
