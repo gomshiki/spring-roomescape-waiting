@@ -10,8 +10,6 @@ import roomescape.reservation.application.ReservationService;
 import roomescape.reservation.dto.ReservationAdminRequestDto;
 import roomescape.reservation.dto.ReservationRequestDto;
 import roomescape.reservation.dto.ReservationResponseDto;
-import roomescape.reservation.dto.TimeDto;
-import roomescape.reservationtheme.dto.ReservationThemeRequestDto;
 
 @RestController
 public class ReservationAdminController {
@@ -28,17 +26,11 @@ public class ReservationAdminController {
             @RequestBody ReservationAdminRequestDto reservationAdminRequestDto
     ) {
         final MemberResponseDto foundMember = memberService.findById(reservationAdminRequestDto.getMemberId());
-
-        final ReservationRequestDto reservationRequestDto = new ReservationRequestDto(
-                foundMember.getName(),
-                reservationAdminRequestDto.getDate(),
-                new TimeDto(reservationAdminRequestDto.getTimeId()),
-                new ReservationThemeRequestDto(reservationAdminRequestDto.getThemeId())
-        );
+        final ReservationRequestDto reservationRequestDto = ReservationRequestDto
+                .of(foundMember, reservationAdminRequestDto);
 
         final ReservationResponseDto savedReservation = reservationService.save(reservationRequestDto);
 
         return ResponseEntity.ok().body(savedReservation);
-
     }
 }

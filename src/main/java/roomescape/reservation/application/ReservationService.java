@@ -29,17 +29,7 @@ public class ReservationService {
     }
 
     public ReservationResponseDto save(final ReservationRequestDto reservationRequestDto) {
-        final Reservation reservation = new Reservation.Builder()
-                .name(reservationRequestDto.getName())
-                .date(reservationRequestDto.getDate())
-                .reservationTime(
-                        new ReservationTime(reservationRequestDto.getTimeDto().getTimeId())
-                )
-                .reservationTheme(
-                        new ReservationTheme(
-                                reservationRequestDto.getReservationThemeRequestDto().getThemeId())
-                )
-                .build();
+        final Reservation reservation = ReservationRequestDto.from(reservationRequestDto);
 
         final Reservation savedReservation = reservationRepository.save(reservation);
         return ReservationResponseDto.from(savedReservation);

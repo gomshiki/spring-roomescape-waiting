@@ -2,7 +2,11 @@ package roomescape.reservation.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import roomescape.member.dto.MemberResponseDto;
+import roomescape.reservation.domain.Reservation;
+import roomescape.reservationtheme.domain.ReservationTheme;
 import roomescape.reservationtheme.dto.ReservationThemeRequestDto;
+import roomescape.reservationtime.domain.ReservationTime;
 
 public class ReservationRequestDto {
     @JsonProperty("id")
@@ -21,6 +25,9 @@ public class ReservationRequestDto {
     @JsonProperty("theme")
     private ReservationThemeRequestDto reservationThemeRequestDto;
 
+    public ReservationRequestDto() {
+    }
+
     public ReservationRequestDto(
             String name,
             String date,
@@ -31,6 +38,30 @@ public class ReservationRequestDto {
         this.date = date;
         this.timeDto = timeDto;
         this.reservationThemeRequestDto = reservationThemeRequestDto;
+    }
+
+    public static ReservationRequestDto of(
+            MemberResponseDto memberResponseDto, ReservationAdminRequestDto reservationAdminRequestDto
+    ) {
+        return new ReservationRequestDto(
+                memberResponseDto.getName(),
+                reservationAdminRequestDto.getDate(),
+                new TimeDto(reservationAdminRequestDto.getTimeId()),
+                new ReservationThemeRequestDto(reservationAdminRequestDto.getThemeId())
+        );
+    }
+
+    public static Reservation from(ReservationRequestDto reservationRequestDto) {
+        return new Reservation.Builder()
+                .name(reservationRequestDto.getName())
+                .date(reservationRequestDto.getDate())
+                .reservationTime(
+                        new ReservationTime(reservationRequestDto.getTimeDto().getTimeId())
+                )
+                .reservationTheme(
+                        new ReservationTheme(reservationRequestDto.getReservationThemeRequestDto().getThemeId())
+                )
+                .build();
     }
 
     public static class Builder {
