@@ -13,3 +13,7 @@
     color: #666666;
     cursor: not-allowed;
 }
+
+.booked {
+    background-color: lightgray !important;
+}
