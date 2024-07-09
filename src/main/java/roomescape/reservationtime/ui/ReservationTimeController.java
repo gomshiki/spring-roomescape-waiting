@@ -7,6 +7,8 @@ import roomescape.reservationtime.application.ReservationTimeService;
 import roomescape.reservationtime.dto.ReservationTimeRequestDto;
 import roomescape.reservationtime.dto.ReservationTimeResponseDto;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -26,13 +28,16 @@ public class ReservationTimeController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationTimeResponseDto> addTime(final @Valid @RequestBody ReservationTimeRequestDto reservationTimeRequestDto) {
+    public ResponseEntity<ReservationTimeResponseDto> addTime(
+            final @Valid @RequestBody ReservationTimeRequestDto reservationTimeRequestDto
+    ) throws URISyntaxException
+    {
         final ReservationTimeResponseDto time = reservationTimeService.addTime(reservationTimeRequestDto);
-        return ResponseEntity.ok().body(time);
+        return ResponseEntity.created(new URI("/times/" + time.getTimeId())).body(time);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTime(final @PathVariable Long id) {
+    public ResponseEntity<Void> deleteTime(@PathVariable("id") Long id) {
         reservationTimeService.deleteTime(id);
         return ResponseEntity.ok().build();
     }

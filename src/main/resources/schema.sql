@@ -26,6 +26,7 @@ CREATE TABLE reservation
     date VARCHAR(255) NOT NULL,
     time_id BIGINT,
     theme_id BIGINT,                                        -- 컬럼 추가
+    status VARCHAR(255) DEFAULT '예약',             -- 컬럼 추가
     PRIMARY KEY (id),
     FOREIGN KEY (time_id) REFERENCES reservation_time (id),
     FOREIGN KEY (theme_id) REFERENCES theme (id)            -- 외래키 추가

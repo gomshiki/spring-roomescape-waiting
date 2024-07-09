@@ -15,7 +15,7 @@ import static roomescape.member.infra.TokenUtil.extractTokenFromCookie;
 @Component
 public class MemberHandlerInterceptor implements HandlerInterceptor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MemberHandlerInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(MemberHandlerInterceptor.class);
     private final AuthService authService;
 
     public MemberHandlerInterceptor(AuthService authService) {
@@ -28,7 +28,7 @@ public class MemberHandlerInterceptor implements HandlerInterceptor {
         final String token = extractTokenFromCookie(cookies);
         final MemberResponseDto member = authService.findMember(token);
 
-        LOGGER.info("check role of member : {}", member);
+        log.info("check role of member : {}", member);
 
         if (member == null || !"ADMIN".equals(member.getRole())) {
             response.setStatus(401);

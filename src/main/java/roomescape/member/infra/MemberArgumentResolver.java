@@ -1,4 +1,3 @@
-
 package roomescape.member.infra;
 
 import jakarta.servlet.http.Cookie;
@@ -19,7 +18,7 @@ import static roomescape.member.infra.TokenUtil.extractTokenFromCookie;
 @Component
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MemberArgumentResolver.class);
+    private static final Logger log = LoggerFactory.getLogger(MemberArgumentResolver.class);
 
     private final AuthService authService;
 
@@ -38,7 +37,8 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         final Cookie[] cookies = request.getCookies();
         final String token = extractTokenFromCookie(cookies);
-        LOGGER.info("token : {}", token);
+        log.info("token : {}", token);
+
         return new MemberRequestDto(authService.findMemberName(token).getName());
     }
 }

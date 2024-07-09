@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
-
 @Entity(name = "theme")
 public class ReservationTheme {
 

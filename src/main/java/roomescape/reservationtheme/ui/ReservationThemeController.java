@@ -1,8 +1,6 @@
 package roomescape.reservationtheme.ui;
 
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.reservationtheme.application.ReservationThemeService;
@@ -16,7 +14,6 @@ import java.util.List;
 @RequestMapping("/themes")
 public class ReservationThemeController {
 
-    private static final Logger log = LoggerFactory.getLogger(ReservationThemeController.class);
     private final ReservationThemeService reservationThemeService;
 
     public ReservationThemeController(ReservationThemeService reservationThemeService) {
@@ -36,7 +33,7 @@ public class ReservationThemeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTheme(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTheme(@PathVariable("id") Long id) {
         reservationThemeService.deleteTheme(id);
         return ResponseEntity.noContent().build();
     }

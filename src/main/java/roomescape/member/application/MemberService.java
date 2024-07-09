@@ -3,6 +3,7 @@ package roomescape.member.application;
 import org.springframework.stereotype.Service;
 import roomescape.member.domain.Member;
 import roomescape.member.dto.MemberResponseDto;
+import roomescape.member.infra.MemberNotFoundException;
 import roomescape.member.infra.MemberRepository;
 
 import java.util.List;
@@ -18,10 +19,11 @@ public class MemberService {
 
     public List<MemberResponseDto> findAll() {
         List<Member> foundMembers = memberRepository.findAll();
-        return foundMembers.stream().map(
-                member -> new MemberResponseDto(member.getId(), member.getName())
-        ).toList();
+        return foundMembers.stream().map(MemberResponseDto::from).toList();
+    }
 
-
+    public MemberResponseDto findById(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
+        return MemberResponseDto.from(member);
     }
 }

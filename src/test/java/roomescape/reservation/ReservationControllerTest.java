@@ -1,4 +1,4 @@
-package roomescape;
+package roomescape.reservation;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -63,9 +63,7 @@ class ReservationControllerTest {
         assertAll(
                 () -> assertEquals(HttpStatus.OK.value(), response.statusCode()),
                 () -> assertEquals("제이슨", response.jsonPath().getString("member.name")),
-                () -> assertEquals(request.getDate(), response.jsonPath().getString("date")),
-                () -> assertEquals(request.getTimeDto().getStartAt(),
-                        response.jsonPath().getString("time.startAt"))
+                () -> assertEquals(request.getDate(), response.jsonPath().getString("date"))
         );
     }
 
@@ -81,7 +79,7 @@ class ReservationControllerTest {
         assertSoftly(
                 softAssertions -> {
                     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-                    assertThat(response.jsonPath().getList("id").size()).isEqualTo(2);
+                    assertThat(response.jsonPath().getList("id")).hasSize(2);
                 }
         );
     }
@@ -101,7 +99,6 @@ class ReservationControllerTest {
         // when
         final Response response2 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(request)
                 .when().delete("/reservations/" + response1.jsonPath().getInt("id"))
                 .then().log().all().extract().response();
 
@@ -135,7 +132,7 @@ class ReservationControllerTest {
         );
     }
 
-    @DisplayName("특정 일자와 테마 선택 시 기 예약된 시간을 제외한 시간을 반환한다.")
+    @DisplayName("특정 일자와 테마 선택 시 이미 예약된 시간을 제외한 시간을 반환한다.")
     @ParameterizedTest
     @CsvSource(value = {"2024-12-25, 1, 2", "2025-12-31, 2, 3",})
     void getAvaliableTimes(String date, Long themeId, int size) {

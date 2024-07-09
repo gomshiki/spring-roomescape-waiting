@@ -9,6 +9,9 @@ public class ReservationTimeResponseDto {
     @JsonProperty("startAt")
     private String startAt;
 
+    public ReservationTimeResponseDto() {
+    }
+
     public ReservationTimeResponseDto(Long timeId, String startAt) {
         this.timeId = timeId;
         this.startAt = startAt;

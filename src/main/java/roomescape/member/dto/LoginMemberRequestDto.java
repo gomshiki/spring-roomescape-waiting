@@ -9,6 +9,9 @@ public class LoginMemberRequestDto {
     @NotEmpty(message = "이이디와 비밀번호를 확인해주세요")
     private String password;
 
+    public LoginMemberRequestDto() {
+    }
+
     public LoginMemberRequestDto(String email, String password) {
         this.email = email;
         this.password = password;

@@ -19,7 +19,7 @@ public class MemberConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(memberArgumentResolver);
     }
 

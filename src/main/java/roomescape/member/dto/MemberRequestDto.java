@@ -4,6 +4,9 @@ public class MemberRequestDto {
 
     private String name;
 
+    public MemberRequestDto() {
+    }
+
     public MemberRequestDto(String name) {
         this.name = name;
     }

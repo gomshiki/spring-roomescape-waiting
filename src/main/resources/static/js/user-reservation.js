@@ -42,7 +42,7 @@ function renderTheme(themes) {
           createSlot('theme', theme name, theme id) 형태로 호출
     */
     const name = theme.name;
-    const themeId = theme.themeId;
+    const themeId = theme.id;
     themeSlots.appendChild(createSlot('theme', name, themeId));
   });
 }

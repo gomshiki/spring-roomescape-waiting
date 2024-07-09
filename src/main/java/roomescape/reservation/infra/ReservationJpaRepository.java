@@ -7,7 +7,6 @@ import roomescape.reservation.domain.Reservation;
 import roomescape.reservationtime.domain.ReservationTime;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ReservationJpaRepository extends CrudRepository<Reservation, Long>, ReservationRepository {
 
@@ -38,6 +37,13 @@ public interface ReservationJpaRepository extends CrudRepository<Reservation, Lo
             JOIN FETCH r.reservationTheme
             WHERE r.id = :id
             """)
-    Optional<Reservation> findByIdWithDetails(@Param("id") Long id);
+    List<Reservation> findByIdWithDetails(@Param("id") Long id);
 
+    @Query("""
+            SELECT r FROM Reservation r
+            JOIN FETCH r.reservationTime
+            JOIN FETCH r.reservationTheme
+            WHERE r.name = :name
+            """)
+    List<Reservation> findByNameWithDetails(@Param("name") String name);
 }

@@ -16,7 +16,7 @@ public class ReservationThemeJdbcRepository implements ReservationThemeRepositor
     private final RowMapper<ReservationTheme> reservationThemeRowMapper;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
-    public ReservationThemeJdbcRepository(final JdbcTemplate jdbcTemplate) {
+    public ReservationThemeJdbcRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.reservationThemeRowMapper = (resultSet, rowNum) -> new ReservationTheme.Builder()
                 .id(resultSet.getLong("id"))
@@ -34,7 +34,7 @@ public class ReservationThemeJdbcRepository implements ReservationThemeRepositor
         return jdbcTemplate.query(sql, reservationThemeRowMapper);
     }
 
-    public ReservationTheme save(final ReservationTheme theme) {
+    public ReservationTheme save(ReservationTheme theme) {
         if (theme.getId() == null) {
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("name", theme.getName());
@@ -50,17 +50,17 @@ public class ReservationThemeJdbcRepository implements ReservationThemeRepositor
         return theme;
     }
 
-    public Optional<ReservationTheme> findById(final Long id) {
+    public Optional<ReservationTheme> findById(Long id) {
         final String sql = "SELECT id, name, description, thumbnail FROM theme WHERE id = ?";
         return Optional.ofNullable(jdbcTemplate.queryForObject(sql, reservationThemeRowMapper, id));
     }
 
-    public boolean existsById(final Long id) {
+    public boolean existsById(Long id) {
         final String sql = "SELECT EXISTS(SELECT 1 FROM theme WHERE id = ?)";
         return jdbcTemplate.queryForObject(sql, Boolean.class, id);
     }
 
-    public void deleteById(final Long id) {
+    public void deleteById(Long id) {
         final String sql = "DELETE FROM theme WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }

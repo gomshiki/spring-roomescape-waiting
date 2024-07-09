@@ -4,7 +4,6 @@ import roomescape.reservation.domain.Reservation;
 import roomescape.reservationtime.domain.ReservationTime;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ReservationRepository {
 
@@ -18,5 +17,5 @@ public interface ReservationRepository {
 
     List<ReservationTime> getAvailableReservationTimes(String date, Long themeId);
 
-    Optional<Reservation> findByIdWithDetails(Long id);
+    List<Reservation> findByNameWithDetails(String name);
 }
