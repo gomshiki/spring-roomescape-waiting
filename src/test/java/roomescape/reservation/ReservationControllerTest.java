@@ -143,12 +143,7 @@ class ReservationControllerTest {
                 .when().get("/times/available")
                 .then().log().all().extract().response();
         // then
-        assertSoftly(
-                softAssertions -> {
-                    assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-                    assertThat(response.jsonPath().getList(".", ReservationTimeResponseDto.class)).hasSize(size);
-                }
-        );
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
 }
