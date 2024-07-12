@@ -1,20 +1,29 @@
 package roomescape.reservation.application;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.dto.ReservationMineResponseDto;
 import roomescape.reservation.dto.ReservationRequestDto;
 import roomescape.reservation.dto.ReservationResponseDto;
+import roomescape.reservation.domain.ReservationTimeWithStatus;
+import roomescape.reservation.dto.ReservationTimeWithStatusDto;
+import roomescape.reservation.infra.ReservationAndWaitingProjection;
 import roomescape.reservation.infra.ReservationJpaRepository;
 import roomescape.reservation.infra.ReservationRepository;
-import roomescape.reservationtime.domain.ReservationTime;
-import roomescape.reservationtime.dto.ReservationTimeResponseDto;
 
 import java.util.List;
 
 @Service
 public class ReservationService {
+
+    private String currentStatus;
+
+    public void setCurrentStatus(String status) {
+        this.currentStatus = status;
+    }
 
     private final ReservationRepository reservationRepository;
 
@@ -28,7 +37,7 @@ public class ReservationService {
     }
 
     public ReservationResponseDto save(ReservationRequestDto reservationRequestDto) {
-        final Reservation reservation = ReservationRequestDto.from(reservationRequestDto);
+        final Reservation reservation = ReservationRequestDto.of(reservationRequestDto, currentStatus);
 
         final Reservation savedReservation = reservationRepository.save(reservation);
         return ReservationResponseDto.from(savedReservation);
@@ -44,27 +53,24 @@ public class ReservationService {
         reservationRepository.deleteById(id);
     }
 
-    public List<ReservationTimeResponseDto> findAvailableTimes(String date, Long themeId) {
-        final List<ReservationTime> availableReservationTimes =
-                reservationRepository.getAvailableReservationTimes(date, themeId);
+    public List<ReservationTimeWithStatusDto> findAvailableTimes(String date, Long themeId) {
+        final List<ReservationTimeWithStatus> availableReservationTimes =
+                reservationRepository.findReservationTimesWithStatus(date, themeId);
 
         return availableReservationTimes.stream()
-                .map(reservationTime -> new ReservationTimeResponseDto(
-                        reservationTime.getId(),
-                        reservationTime.getStartAt()
-                )).toList();
+                .map(reservationTimeWithStatus ->
+                        new ReservationTimeWithStatusDto(
+                                reservationTimeWithStatus.getTimeId(),
+                                reservationTimeWithStatus.getStartAt(),
+                                reservationTimeWithStatus.getStatus()
+                        )
+                ).toList();
     }
 
     public List<ReservationMineResponseDto> findAllReservationByName(String name) {
-        List<Reservation> foundReservations = reservationRepository.findByNameWithDetails(name);
-        return foundReservations.stream().map(
-                reservation -> new ReservationMineResponseDto(
-                        reservation.getId(),
-                        reservation.getDate(),
-                        reservation.getStatus(),
-                        reservation.getReservationTime().getStartAt(),
-                        reservation.getReservationTheme().getName()
-                )
-        ).toList();
+        List<ReservationAndWaitingProjection> foundReservations = reservationRepository.findByNameWithDetails(name);
+
+        return foundReservations.stream().map(ReservationMineResponseDto::from).toList();
+
     }
 }

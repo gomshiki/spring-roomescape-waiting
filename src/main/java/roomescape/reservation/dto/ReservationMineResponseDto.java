@@ -1,6 +1,7 @@
 package roomescape.reservation.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import roomescape.reservation.infra.ReservationAndWaitingProjection;
 
 public class ReservationMineResponseDto {
     @JsonProperty("reservationId")
@@ -20,6 +21,12 @@ public class ReservationMineResponseDto {
         this.status = status;
         this.timeStartAt = timeStartAt;
         this.themeName = themeName;
+    }
+
+    public static ReservationMineResponseDto from(ReservationAndWaitingProjection projection) {
+        return new ReservationMineResponseDto(
+                projection.getId(), projection.getDate(), projection.getStatus(), projection.getStartAt(), projection.getThemeName()
+        );
     }
 
     public Long getReservationId() {

@@ -1,6 +1,7 @@
 package roomescape.reservation.infra;
 
 import roomescape.reservation.domain.Reservation;
+import roomescape.reservation.domain.ReservationTimeWithStatus;
 import roomescape.reservationtime.domain.ReservationTime;
 
 import java.util.List;
@@ -17,5 +18,7 @@ public interface ReservationRepository {
 
     List<ReservationTime> getAvailableReservationTimes(String date, Long themeId);
 
-    List<Reservation> findByNameWithDetails(String name);
+    List<ReservationAndWaitingProjection> findByNameWithDetails(String name);
+
+    List<ReservationTimeWithStatus> findReservationTimesWithStatus(String date, Long themeId);
 }

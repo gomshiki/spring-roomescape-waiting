@@ -10,6 +10,7 @@ import roomescape.member.dto.MemberResponseDto;
 import roomescape.member.infra.TokenUtil;
 import roomescape.reservation.application.ReservationService;
 import roomescape.reservation.dto.ReservationMineResponseDto;
+import roomescape.reservation.infra.ReservationAndWaitingProjection;
 
 import java.util.List;
 
@@ -32,9 +33,8 @@ public class ReservationMineController {
         String token = TokenUtil.extractTokenFromCookie(cookies);
 
         MemberResponseDto foundMember = authService.findMember(token);
-        List<ReservationMineResponseDto> mineResponseDtos = reservationService.findAllReservationByName(
-                foundMember.getName()
-        );
+        List<ReservationMineResponseDto> mineResponseDtos = reservationService
+                .findAllReservationByName(foundMember.getName());
 
         return ResponseEntity.ok().body(mineResponseDtos);
     }

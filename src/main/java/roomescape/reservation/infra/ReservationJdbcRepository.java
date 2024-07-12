@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import roomescape.reservation.domain.Reservation;
+import roomescape.reservation.domain.ReservationTimeWithStatus;
 import roomescape.reservationtheme.domain.ReservationTheme;
 import roomescape.reservationtime.domain.ReservationTime;
 
@@ -17,6 +18,7 @@ public class ReservationJdbcRepository implements ReservationRepository {
     private final SimpleJdbcInsert simpleJdbcInsert;
     private final RowMapper<Reservation> reservationRowMapper;
     private final RowMapper<ReservationTime> reservationTimeRowMapper;
+    private final RowMapper<ReservationTimeWithStatus> reservationTimeStatusDtoRowMapper;
 
     public ReservationJdbcRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -46,6 +48,11 @@ public class ReservationJdbcRepository implements ReservationRepository {
                 resultSet.getLong("reservation_time_id"),
                 resultSet.getString("start_at")
         );
+        this.reservationTimeStatusDtoRowMapper = (resultSet, rowNum) -> new ReservationTimeWithStatus(
+                resultSet.getLong("time_id"),
+                resultSet.getString("start_at"),
+                resultSet.getBoolean("status")
+        );
 
     }
 
@@ -67,7 +74,6 @@ public class ReservationJdbcRepository implements ReservationRepository {
                 """;
 
         return jdbcTemplate.query(sql, reservationRowMapper);
-
     }
 
     public Reservation save(Reservation reservation) {
@@ -111,6 +117,22 @@ public class ReservationJdbcRepository implements ReservationRepository {
         return jdbcTemplate.query(sql, reservationTimeRowMapper, date, themeId);
     }
 
+    public List<ReservationTimeWithStatus> findReservationTimesWithStatus(String date, Long themeId) {
+        String sql = """
+                SELECT rt.id AS timeId, rt.start_at AS startAt,
+                           CASE 
+                                WHEN r.id IS NOT NULL 
+                                    THEN TRUE 
+                                ELSE FALSE 
+                            END AS status
+                FROM reservation_time rt
+                LEFT JOIN reservation r ON rt.id = r.time_id AND r.theme_id = ? AND r.date = ?
+                WHERE r.status = '예약' OR r.status IS NULL
+                """;
+
+        return jdbcTemplate.query(sql, reservationTimeStatusDtoRowMapper, date, themeId);
+    }
+
     public List<Reservation> findByIdWithDetails(Long id) {
         final String sql = """
                 SELECT r.id AS reservation_id, 
@@ -131,24 +153,33 @@ public class ReservationJdbcRepository implements ReservationRepository {
 
         return jdbcTemplate.query(sql, reservationRowMapper, id);
     }
-    public List<Reservation> findByNameWithDetails(String name) {
-        final String sql = """
-                SELECT r.id AS reservation_id, 
-                        r.name AS reservation_name, 
-                        r.date AS reservation_date, 
-                        r.status AS status, 
-                        t.id AS time_id, 
-                        t.start_at AS start_at,
-                        th.id  AS theme_id,
-                        th.name AS theme_name,
-                        th.description AS theme_description,
-                        th.thumbnail AS theme_thumbnail
-                FROM reservation AS r 
+
+    public List<ReservationAndWaitingProjection> findByNameWithDetails(String name) {
+   /*     final String sql = """
+                (SELECT r.id AS reservation_id,
+                       r.name AS reservation_name,
+                       r.date AS reservation_date,
+                       r.status AS status,
+                       t.start_at AS start_at,
+                       th.name AS theme_name
+                FROM reservation AS r
                 INNER JOIN reservation_time AS t ON r.time_id = t.id
                 INNER JOIN theme AS th ON r.theme_id = th.id
-                WHERE r.name = ?
+                WHERE r.name = ?)
+                UNION ALL
+                (SELECT w.id AS reservation_id,
+                       w.name AS reservation_name,
+                       w.date AS reservation_date,
+                       w.status AS status,
+                       t.start_at AS start_at,
+                       th.name AS theme_name,
+                FROM waiting AS w
+                INNER JOIN reservation_time AS t ON w.time_id = t.id
+                INNER JOIN theme AS th ON w.theme_id = th.id
+                WHERE w.name = ?)
                 """;
 
-        return jdbcTemplate.query(sql, reservationRowMapper, name);
+        return jdbcTemplate.query(sql, reservationRowMapper, name, name);*/
+        return null;
     }
 }
