@@ -1,7 +1,6 @@
 package roomescape.reservation.domain;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
 import roomescape.reservationtheme.domain.ReservationTheme;
 import roomescape.reservationtime.domain.ReservationTime;
 
@@ -23,20 +22,17 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id")
     private ReservationTheme reservationTheme;
-
-    @ColumnDefault("'예약'") // 작은따옴표로 감싸서 문자열로 인식하도록 함
-    @Column(name = "status", nullable = false)
     private String status;
 
-    @PrePersist
-    protected void onCreate() {
-        if (this.status == null) {
-            this.status = "예약";
-        }
+    protected Reservation() {
     }
 
     public Reservation(String name, String date, ReservationTime reservationTime, ReservationTheme reservationTheme) {
         this(null, name, date, reservationTime, reservationTheme,null);
+    }
+
+    public Reservation(String name, String date, ReservationTime reservationTime, ReservationTheme reservationTheme, String status) {
+        this(null, name, date, reservationTime, reservationTheme, status);
     }
 
     public Reservation(
@@ -59,15 +55,14 @@ public class Reservation {
         this.status = status;
     }
 
-    public Reservation() {
-    }
-
     public static class Builder {
         private Long id;
         private String name;
         private String date;
         private ReservationTime reservationTime;
         private ReservationTheme reservationTheme;
+        private String status;
+
         public Builder id(Long id) {
             this.id = id;
             return this;
@@ -92,9 +87,15 @@ public class Reservation {
             this.reservationTheme = reservationTheme;
             return this;
         }
+        public Builder status(String status) {
+            this.status = status;
+            return this;
+        }
 
         public Reservation build() {
-            return new Reservation(id, name, date, reservationTime, reservationTheme, null);
+            return new Reservation(
+                    id, name, date, reservationTime, reservationTheme, status
+            );
         }
     }
     public Long getId() {

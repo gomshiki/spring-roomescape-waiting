@@ -25,6 +25,9 @@ public class ReservationRequestDto {
     @JsonProperty("theme")
     private ReservationThemeRequestDto reservationThemeRequestDto;
 
+    @JsonProperty("statusa")
+    private String status;
+
     public ReservationRequestDto() {
     }
 
@@ -51,7 +54,7 @@ public class ReservationRequestDto {
         );
     }
 
-    public static Reservation from(ReservationRequestDto reservationRequestDto) {
+    public static Reservation of(ReservationRequestDto reservationRequestDto, String status) {
         return new Reservation.Builder()
                 .name(reservationRequestDto.getName())
                 .date(reservationRequestDto.getDate())
@@ -61,6 +64,7 @@ public class ReservationRequestDto {
                 .reservationTheme(
                         new ReservationTheme(reservationRequestDto.getReservationThemeRequestDto().getThemeId())
                 )
+                .status(status)
                 .build();
     }
 

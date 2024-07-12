@@ -18,17 +18,21 @@ public class ReservationResponseDto {
     private ReservationTimeResponseDto reservationTimeResponseDto;
     @JsonProperty("theme")
     private ReservationThemeResponseDto reservationThemeResponseDto;
+    @JsonProperty("status")
+    private String status;
 
     public ReservationResponseDto(
             Long id, MemberResponseDto memberResponseDto, String date,
             ReservationTimeResponseDto reservationTimeResponseDto,
-            ReservationThemeResponseDto reservationThemeResponseDto
+            ReservationThemeResponseDto reservationThemeResponseDto,
+            String status
     ) {
         this.id = id;
         this.memberResponseDto = memberResponseDto;
         this.date = date;
         this.reservationTimeResponseDto = reservationTimeResponseDto;
         this.reservationThemeResponseDto = reservationThemeResponseDto;
+        this.status = status;
     }
 
     public static class Builder {
@@ -37,6 +41,7 @@ public class ReservationResponseDto {
         private String date;
         private ReservationTimeResponseDto reservationTimeResponseDto;
         private ReservationThemeResponseDto reservationThemeResponseDto;
+        private String status;
 
         public Builder id(Long id) {
             this.id = id;
@@ -63,8 +68,15 @@ public class ReservationResponseDto {
             return this;
         }
 
+        public Builder status(String status) {
+            this.status = status;
+            return this;
+        }
+
         public ReservationResponseDto build() {
-            return new ReservationResponseDto(id, memberResponseDto, date, reservationTimeResponseDto, reservationThemeResponseDto);
+            return new ReservationResponseDto(
+                    id, memberResponseDto, date, reservationTimeResponseDto, reservationThemeResponseDto, status
+            );
         }
     }
 
@@ -83,7 +95,9 @@ public class ReservationResponseDto {
                         reservation.getReservationTheme().getName(),
                         reservation.getReservationTheme().getDescription(),
                         reservation.getReservationTheme().getThumbnail()
-                )).build();
+                ))
+                .status(reservation.getStatus())
+                .build();
     }
 
     public Long getId() {

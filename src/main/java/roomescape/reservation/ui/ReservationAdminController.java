@@ -10,6 +10,7 @@ import roomescape.reservation.application.ReservationService;
 import roomescape.reservation.dto.ReservationAdminRequestDto;
 import roomescape.reservation.dto.ReservationRequestDto;
 import roomescape.reservation.dto.ReservationResponseDto;
+import roomescape.reservation.infra.ReservationStatus;
 
 @RestController
 public class ReservationAdminController {
@@ -22,6 +23,7 @@ public class ReservationAdminController {
     }
 
     @PostMapping("/admin/reservations")
+    @ReservationStatus("예약")
     public ResponseEntity<ReservationResponseDto> createReservation(
             @RequestBody ReservationAdminRequestDto reservationAdminRequestDto
     ) {

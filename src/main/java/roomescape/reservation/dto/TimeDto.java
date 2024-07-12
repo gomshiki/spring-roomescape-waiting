@@ -28,4 +28,12 @@ public class TimeDto {
     public String getStartAt() {
         return startAt;
     }
+
+    @Override
+    public String toString() {
+        return "TimeDto{" +
+                "timeId=" + timeId +
+                ", startAt='" + startAt + '\'' +
+                '}';
+    }
 }

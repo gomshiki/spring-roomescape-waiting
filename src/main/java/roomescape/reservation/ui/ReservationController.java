@@ -8,6 +8,7 @@ import roomescape.member.infra.LoginMember;
 import roomescape.reservation.application.ReservationService;
 import roomescape.reservation.dto.ReservationRequestDto;
 import roomescape.reservation.dto.ReservationResponseDto;
+import roomescape.reservation.infra.ReservationStatus;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class ReservationController {
     }
 
     @PostMapping
+    @ReservationStatus("예약")
     public ResponseEntity<ReservationResponseDto> createReservation(
             @Valid @RequestBody ReservationRequestDto reservationRequestDto,
             @LoginMember MemberRequestDto memberRequestDto)
